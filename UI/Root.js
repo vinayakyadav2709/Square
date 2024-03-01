@@ -28,7 +28,7 @@ export default function Root() {
     <View style={styles.container}>
       <HomeTitle title = {"Square Order"}></HomeTitle>
 
-      <OrderCard id={1} name={"Name Surname"} date={"12 Feb"} modalVisibility={stateSetter}></OrderCard>
+      <OrderCard id={1} name={"Name sample Surname"} date={"12 Feb"} modalVisibility={stateSetter}></OrderCard>
       <OrderCard id={2} name={"Surname Name"} date={"12 Jan"} modalVisibility={stateSetter}></OrderCard>
       
       <Modal visible={modalState}>
