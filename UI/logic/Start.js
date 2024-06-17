@@ -1,23 +1,46 @@
 import {create} from 'zustand';
-import { Mystorage } from './Mystorage';
-import { persist, createJSONStorage } from 'zustand/middleware'
+// import { Mystorage } from './Mystorage';
+// import { persist, createJSONStorage } from 'zustand/middleware'
+
+const setOrder = (state,orderid,OrderObj) => {
+  temp = state.Orders
+  temp[orderid] = OrderObj 
+  
+  return temp
+}
+
+const setProduct = (state,orderid,productID, ProductObj) => {
+  temp = state.Orders
+  temp[orderid].products[productID] = ProductObj
+
+  return temp
+}
+
+const setSize = (state,orderid,productID,sizeid,Objsize) => {
+  temp = state.Orders 
+  temp[orderid].products[productID].sizes[sizeid] = Objsize
+  
+  return temp
+}
+
+
+
+
+
 
 const naam = (set, get) => ({
-  fishes: 0,
-  addAFish: () => set({ fishes: get().fishes + 1 }),
-  killAFish: () => set({ fishes: get().fishes - 1 }),
-  clearTank: () => set({ fishes:0})
+  Orders :[],
+
+  setOrder: (orderid,OrderObj) => set((state) => ({Orders: setOrder(state,orderid,OrderObj)})),
+  setProduct: (orderid,productID, ProductObj) => set((state) => ({Orders: setProduct(state,orderid,productID,ProductObj)})),
+  setSize: (orderid,productID,sizeid,Objsize) => set((state) => ({Orders: setSize(state,orderid,productID,sizeid,Objsize)})),
+
 })
 
-export const useFishStore = create(
-  persist(
-    naam,
-    {
-      name: 'food-storage', // name of the item in the storage (must be unique)
-      storage: createJSONStorage(() => Mystorage), // (optional) by default, 'localStorage' is used
-    },
-  ),
-)
+
+export const useStore = create(naam)
+
+
 
 
 

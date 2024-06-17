@@ -1,11 +1,15 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, Button, Modal } from 'react-native';
+import { StyleSheet, Text, View, Button, Modal, ScrollView } from 'react-native';
 
 import ProductPage from './Page/ProductPage.js';
 import HomeTitle from './Uielements/HomeTitle.js'
 import OrderCard from './Containers/OrderCard.js';
 
-import { useFishStore } from './logic/Start.js';
+import Pdf from './pdf/Pdf.js';
+
+import { useStore } from './logic/Start.js';
+import { useOrderidHook } from './logic/manager.js';
+
 
 
 
@@ -13,38 +17,67 @@ import { useFishStore } from './logic/Start.js';
 
 
 export default function Root() {
-  const fishes = useFishStore((state)=>state.fishes)
-  const addAFishbutton = useFishStore((state)=>state.addAFish)
-  const killAFishbutton = useFishStore((state)=>state.killAFish)
-  const clearTankbutton = useFishStore((state)=>state.clearTank)
 
 
-  const [modalState,stateSetter] = useState(false);
-  function addHandler () {
-    console.log("in adHanler")
+  const [Orders] = useStore((state)=>[
+     state.Orders
+    ])
+
+  const [currentOrderID,setcurrentOrderID] = useOrderidHook((state) => [
+    state.currentOrderID,
+    state.setcurrentOrderID
+  ])
+
+
+  const [modalState, stateSetter] = useState(false);
+
+
+
+
+
+  const addHandler = () => {
+    setcurrentOrderID(Orders.length)
     stateSetter(true)
+    console.log(currentOrderID)
   }
+
+ 
   return (
+    <ScrollView>
     <View style={styles.container}>
-      <HomeTitle title = {"Square Order"}></HomeTitle>
+      <HomeTitle title={"Square Order"}></HomeTitle>
 
-      <OrderCard id={1} name={"Name Surname"} date={"12 Feb"} modalVisibility={stateSetter}></OrderCard>
-      <OrderCard id={2} name={"Surname Name"} date={"12 Jan"} modalVisibility={stateSetter}></OrderCard>
       
-      <Modal visible={modalState}>
-       <ProductPage modalState={stateSetter}></ProductPage>
-      </Modal>
       
-
-      <Button title={"Add"} onPress={addHandler}></Button>
-      <View>
-        <Button title='test' onPress={addAFishbutton}></Button>
-        <Button title='clear Tank' onPress={clearTankbutton}></Button>
-        <Button title='kill' onPress={killAFishbutton}></Button>
-        <Text>{fishes}</Text>
-      </View>
-    
+    <View>
+    <View>
+      <Pdf></Pdf>
     </View>
+
+      {Orders.map((data,i) => {
+        return(
+          <OrderCard key={i} id={i} name={data.name} date={data.date} modalVisibility={stateSetter}></OrderCard>
+        )
+      })}
+    </View>
+      <Modal visible={modalState}>
+        <ProductPage modalState={stateSetter}></ProductPage>
+      </Modal>
+
+
+      <Button title="Add" onPress={addHandler}></Button>
+      
+      <View>
+        
+       
+        <Text>{currentOrderID}</Text>
+
+      </View>
+
+     
+
+    </View>
+    </ScrollView>
   );
 }
 

@@ -1,12 +1,18 @@
 import { StyleSheet, Text, View, Button } from 'react-native';
 
+import { InchandSuttoMM , MMtoInchandSut } from '../UnitConverter/UnitConverters';
+
+
 
 export default function HomeTitle(props) {
+
   return (
     
       <View style={styles.title}>
        <Text style={styles.titletext}>{props.title} </Text>
-       <Button title='Menu'></Button>
+       {props.Ele}
+       <Button title='Menu' ></Button>
+       
       </View>
       
     
